@@ -1,36 +1,24 @@
-public class Digraph extends Graph {
+public class Digraph extends Grafo {
 
-  public Digraph() {
-    super();
-  }
-
-  public Digraph(String filename) {
-    super(filename);
-  }
-
-  @Override
-  public void addEdge(String v, String w) {
-    addToList(v, w);
-    if (!vertices.contains(v)) {
-      vertices.add(v);
-      totalVertices++;
+    public Digraph() {
+      super();
     }
-    if (!vertices.contains(w)) {
-      vertices.add(w);
-      totalVertices++;
+  
+    public void addEdge(String v, String w) {
+      adicionarAresta(v, w);
+    }
+  
+    public String toDot() {
+      StringBuilder sb = new StringBuilder();
+      sb.append("digraph {" + NOVA_LINHA);
+      sb.append("rankdir = LR;" + NOVA_LINHA);
+      sb.append("node [shape = circle];" + NOVA_LINHA);
+      for (String v : getVertices()) {
+        for (String w : getAdjacentes(v)) {
+          sb.append("\"" + v + "\"" + " -> " + "\"" + w + "\"" + NOVA_LINHA);
+        }
+      }
+      sb.append("}" + NOVA_LINHA);
+      return sb.toString();
     }
   }
-
-  @Override
-  public String toDot() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("digraph {" + NEWLINE);
-    sb.append("rankdir = LR;" + NEWLINE);
-    sb.append("node [shape = circle];" + NEWLINE);
-    for (String v : getVerts().stream().sorted().toList())
-      for (String w : getAdj(v))
-        sb.append("\"" + v + "\"" + " -> " + "\"" + w + "\"" + NEWLINE);
-    sb.append("}" + NEWLINE);
-    return sb.toString();
-  }
-}
