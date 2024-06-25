@@ -11,8 +11,16 @@ class Caixa {
         this.comprimento = comprimento;
     }
 
-    public boolean cabeDentro(Caixa outra) {
-        return this.comprimento < outra.comprimento && this.largura < outra.largura && this.altura < outra.altura;
+    public int getLargura() {
+        return largura;
+    }
+
+    public int getAltura() {
+        return altura;
+    }
+
+    public int getComprimento() {
+        return comprimento;
     }
 
     @Override

@@ -9,12 +9,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class AppGrafo extends Grafo {
+public class AppGrafo extends Graph {
   public static void main(String[] args) {
     List<Caixa> caixas = new ArrayList<>();
     int count = 0;
     
-    try (BufferedReader br = new BufferedReader(new FileReader("caso00010.txt"))) {
+    try (BufferedReader br = new BufferedReader(new FileReader("caso00050.txt"))) {
       String linha;
       while ((linha = br.readLine()) != null) {
           String[] partes = linha.split(" ");
@@ -39,15 +39,20 @@ public class AppGrafo extends Grafo {
     System.out.println(count);
   }
 
+  public boolean cabeDentro(Caixa c1, Caixa c2) {
+    return c1.getComprimento() < c2.getComprimento() && c1.getLargura() < c2.getLargura() && c1.getAltura() < c2.getAltura();
+}
+
   public void construirGrafo(List<Caixa> caixas) {
     for (int i = 0; i < caixas.size(); i++) {
-      for (int j = 0; j < caixas.size(); j++) {
-        if (i != j && caixas.get(i).cabeDentro(caixas.get(j))) {
-          adicionarAresta(caixaParaString(caixas.get(i)), caixaParaString(caixas.get(j)));
+        for (int j = 0; j < caixas.size(); j++) {
+            if (i != j && cabeDentro(caixas.get(i), caixas.get(j))) {
+                // Adicionar aresta do grafo dirigido da caixa que cabe para a caixa maior
+                addEdge(caixaParaString(caixas.get(i)), caixaParaString(caixas.get(j)));
+            }
         }
-      }
     }
-  }
+}
 
   private String caixaParaString(Caixa caixa) {
     return caixa.largura + " " + caixa.altura + " " + caixa.comprimento;
@@ -58,13 +63,13 @@ public class AppGrafo extends Grafo {
     Map<String, Integer> dist = new HashMap<>();
     Map<String, String> anterior = new HashMap<>();
 
-    for (String v : getVertices()) {
-      dist.put(v, Integer.MIN_VALUE);
-    }
+    for (String v : getVerts()) {
+      dist.put(v, 0);  // A distância inicial deve ser 0, não Integer.MIN_VALUE
+  }
     dist.put(verticesOrdenados.get(0), 0);
 
     for (String u : verticesOrdenados) {
-      for (String v : getAdjacentes(u)) {
+      for (String v : getAdj(u)) {
         if (dist.get(v) < dist.get(u) + 1) {
           dist.put(v, dist.get(u) + 1);
           anterior.put(v, u);
@@ -97,7 +102,7 @@ public class AppGrafo extends Grafo {
   private List<String> ordenacaoTopologica() {
     Set<String> visitados = new HashSet<>();
     LinkedList<String> resultado = new LinkedList<>();
-    for (String vertice : getVertices()) {
+    for (String vertice : getVerts()) {
       if (!visitados.contains(vertice)) {
         ordenacaoTopologicaUtil(vertice, visitados, resultado);
       }
@@ -107,10 +112,10 @@ public class AppGrafo extends Grafo {
 
   private void ordenacaoTopologicaUtil(String v, Set<String> visitados, LinkedList<String> resultado) {
     visitados.add(v);
-    for (String vizinho : getAdjacentes(v)) {
-      if (!visitados.contains(vizinho)) {
-        ordenacaoTopologicaUtil(vizinho, visitados, resultado);
-      }
+    for (String vizinho : getAdj(v)) {
+        if (!visitados.contains(vizinho)) {
+            ordenacaoTopologicaUtil(vizinho, visitados, resultado);
+        }
     }
     resultado.addFirst(v);
   }
