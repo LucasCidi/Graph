@@ -51,25 +51,6 @@ public class Graph {
     return totalEdges;
   }
 
-  public String toDot() {
-    // Usa um conjunto de arestas para evitar duplicatas
-    Set<String> edges = new HashSet<>();
-    StringBuilder sb = new StringBuilder();
-    sb.append("Grafo " + NEWLINE);
-    sb.append("rankdir = LR;" + NEWLINE);
-    sb.append("node [shape = circle];" + NEWLINE);
-    for (String v : getVerts().stream().sorted().toList()) {
-      for (String w : getAdj(v)) {
-        String edge = v.compareTo(w) > 0 ? v + w : w + v;
-        if (!edges.contains(edge)) {
-          sb.append("\"" + v + "\"" + " -- " + "\"" + w + "\"" + NEWLINE);
-          edges.add(edge);
-        }
-      }
-    }
-    sb.append("}" + NEWLINE);
-    return sb.toString();
-  }
 
   // Adiciona um vértice adjacente a outro, criando a lista
   // de adjacências caso ainda não exista no dicionário

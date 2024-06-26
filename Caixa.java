@@ -1,5 +1,3 @@
-import java.util.*;
-
 class Caixa {
     int largura;
     int altura;
