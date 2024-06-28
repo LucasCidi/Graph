@@ -21,7 +21,6 @@ public class Graph {
 
   public void addEdge(String v, String w) {
     addToList(v, w);
-    addToList(w, v);
     if (!vertices.contains(v)) {
       vertices.add(v);
       totalVertices++;
@@ -51,9 +50,6 @@ public class Graph {
     return totalEdges;
   }
 
-
-  // Adiciona um vértice adjacente a outro, criando a lista
-  // de adjacências caso ainda não exista no dicionário
   protected List<String> addToList(String v, String w) {
     List<String> list = Grafo.get(v);
     if (list == null)
